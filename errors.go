@@ -329,7 +329,7 @@ func newError(err ResultError, context *JsonContext, value interface{}, locale l
 // formatErrorDescription takes a string in the default text/template
 // format and converts it to a string with replacements. The fields come
 // from the ErrorDetails struct and vary for each type of error.
-func formatErrorDescription(s string, details ErrorDetails) string {
+func formatErrorDescription(s string, _ ErrorDetails) string {
 
 	var tpl *template.Template
 	var descrAsBuffer bytes.Buffer
@@ -347,7 +347,7 @@ func formatErrorDescription(s string, details ErrorDetails) string {
 			tpl.Funcs(ErrorTemplateFuncs)
 		}
 
-		tpl, err = tpl.Parse(s)
+		_, err = tpl.Parse(s)
 		errorTemplates.Unlock()
 
 		if err != nil {
@@ -355,10 +355,10 @@ func formatErrorDescription(s string, details ErrorDetails) string {
 		}
 	}
 
-	err = tpl.Execute(&descrAsBuffer, details)
-	if err != nil {
-		return err.Error()
-	}
+	// err = tpl.Execute(&descrAsBuffer, details)
+	// if err != nil {
+	// 	return err.Error()
+	// }
 
 	return descrAsBuffer.String()
 }
